@@ -65,7 +65,7 @@ Sua contribuição é valiosa! Ajude-nos a melhorar:
 ## 📬 Contato
 
 Dúvidas ou sugestões? Entre em contato!
-📧 [seuemail@exemplo.com](mailto:seuemail@exemplo.com)
+📧 [seuemail@exemplo.com](mailto:gabrielbertolassi2@icloud.com)
 
 ---
 _Desenvolvido com ❤️ para a comunidade de investidores_
