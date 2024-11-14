@@ -1,49 +1,72 @@
-# founds-simulator
-Simulador de Fundos Imobiliários
-## Descrição
+# 🏢 Founds Simulator
+> _Transforme seus investimentos em Fundos Imobiliários em resultados extraordinários!_
 
-O **Simulador de Fundos Imobiliários** é uma ferramenta interativa desenvolvida para ajudar investidores a calcular e visualizar o crescimento de seus investimentos em fundos imobiliários ao longo do tempo. Com ele, você pode inserir dados como o preço da cota, rendimento mensal, investimento mensal e prazo, e obter uma projeção detalhada dos seus ganhos, incluindo a possibilidade de reinvestir os dividendos.
+## 🎯 Descrição
 
-## Funcionalidades
+O **Simulador de Fundos Imobiliários** é sua ferramenta essencial para visualizar o poder dos investimentos em FIIs! Acompanhe o crescimento do seu patrimônio, simule diferentes cenários e tome decisões mais inteligentes para seu futuro financeiro.
 
-- **Cálculo de Investimento**: Insira o preço da cota, rendimento mensal, investimento mensal e prazo para calcular o total investido, total reinvestido e dividendos mensais.
-- **Reinvestimento de Dividendos**: Opção para reinvestir automaticamente os dividendos ganhos e o saldo restante do investimento mensal.
-- **Conversão de Prazo**: Alterna entre meses e anos para facilitar a entrada de dados.
-- **Detalhamento Mensal**: Exibe uma tabela detalhada com o número de cotas, valor investido, reinvestimento e dividendos para cada mês.
+## ✨ Funcionalidades Principais
 
-## Como Usar
+🔸 **Cálculos Precisos**
+- Simulação detalhada baseada no preço da cota
+- Projeção de rendimentos mensais
+- Análise de reinvestimento automático
 
-1. **Preencha os Campos**: Insira o preço da cota, último rendimento, investimento mensal e prazo desejado.
-2. **Escolha o Prazo**: Utilize o botão para alternar entre meses e anos.
-3. **Reinvestimento**: Marque a opção de reinvestir dividendos se desejar.
-4. **Calcular**: Clique no botão "Calcular" para obter os resultados.
-5. **Resultados**: Veja os resultados detalhados na seção de resultados, incluindo uma tabela com o detalhamento mensal.
+🔸 **Interface Intuitiva**
+- Fácil alternância entre meses e anos
+- Visualização clara dos resultados
+- Tabela mensal detalhada
 
-## Exemplo de Uso
+## 🚀 Como Começar
 
-Para começar a usar o simulador, siga este exemplo prático:
+1. 📝 **Configure sua Simulação**
+    - Insira o preço da cota
+    - Defina o rendimento desejado
+    - Estabeleça seu aporte mensal
 
-1. **Entrada de Dados**:
-    - Preço da Cota: R$ 10,00
-    - Último Rendimento: R$ 0,07
-    - Investimento Mensal: R$ 1.000,00
-    - Prazo: 12 meses
+2. ⚙️ **Personalize**
+    - Escolha o período (meses/anos)
+    - Ative/desative reinvestimento
+    - Ajuste conforme sua estratégia
 
-2. **Resultados Esperados**:
-    - Total Investido: R$ 12.000,00
-    - Total Reinvestido: R$ 504,36
-    - Dividendos Mensais ao Final: R$ 70,00
+3. 📊 **Analise os Resultados**
+    - Visualize o crescimento patrimonial
+    - Acompanhe dividendos mensais
+    - Explore o detalhamento período a período
 
-Este exemplo mostra um cenário onde o investidor aplica R$ 1.000,00 mensalmente em um FII com cota a R$ 10,00 e rendimento de R$ 0,07 por cota, durante 1 ano, com reinvestimento ativado.
+## 💡 Exemplo Prático
 
-## Licença
+### Simulação Base:
+```
+💰 Cota: R$ 10,00
+📈 Rendimento: R$ 0,07
+💵 Aporte Mensal: R$ 1.000,00
+⏳ Período: 12 meses
+```
 
-Este projeto está licenciado sob a GNU Affero General Public License v3.0. Para mais detalhes, consulte o arquivo [LICENSE](./LICENSE).
+### Resultados:
+```
+📊 Investimento Total: R$ 12.000,00
+🔄 Reinvestimento: R$ 504,36
+💸 Dividendos Mensais: R$ 70,00
+```
 
-## Contribuição
+## 📜 Licença
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests para melhorias e correções.
+Projeto sob licença [GNU Affero General Public License v3.0](./LICENSE)
 
-## Contato
+## 🤝 Contribuições
 
-Para dúvidas ou sugestões, entre em contato pelo email: [seuemail@exemplo.com](mailto:seuemail@exemplo.com).
+Sua contribuição é valiosa! Ajude-nos a melhorar:
+- 🐛 Reporte bugs
+- 💡 Sugira melhorias
+- 🔧 Envie pull requests
+
+## 📬 Contato
+
+Dúvidas ou sugestões? Entre em contato!
+📧 [seuemail@exemplo.com](mailto:seuemail@exemplo.com)
+
+---
+_Desenvolvido com ❤️ para a comunidade de investidores_
+
