@@ -69,18 +69,31 @@ function togglePrazoUnidade() {
         botao.textContent = 'Anos';
         prazoFinalLabel.textContent = 'Anos';
         if (input.value) {
-            input.value = (parseFloat(input.value) / 12).toFixed(1).replace('.', ',');
+            const anos = parseFloat(input.value) / 12;
+            input.value = Number.isInteger(anos) ? 
+                anos.toString() : 
+                anos.toFixed(1).replace('.', ',');
         }
     }
 }
 
 function formatarPrazo(prazoMeses) {
-    if (isPrazoEmMeses) {
-        return `${prazoMeses} Meses`;
-    } else {
-        const anos = (prazoMeses / 12).toFixed(1).replace('.', ',');
-        return `${anos} Anos`;
+    const anos = Math.floor(prazoMeses / 12);
+    const meses = prazoMeses % 12;
+    let resultado = '';
+
+    if (anos > 0) {
+        resultado += `${anos} ano${anos > 1 ? 's' : ''}`;
     }
+
+    if (meses > 0) {
+        if (anos > 0) {
+            resultado += ' e ';
+        }
+        resultado += `${meses} mes${meses > 1 ? 'es' : ''}`;
+    }
+
+    return resultado;
 }
 
 function mostrarErro(mensagem) {
@@ -92,43 +105,54 @@ function mostrarErro(mensagem) {
     }, 3000);
 }
 
+function getNumericValue(value) {
+    if (!value || value.trim() === '') return 0;
+    return parseFloat(value.replace(/[^\d,.-]/g, '').replace(',', '.')) || 0;
+}
+
+function formatCurrency(value) {
+    if (isNaN(value) || value === null || value === undefined) return 'R$ 0,00';
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
 function calcular() {
-    const converterParaNumero = (valor) => {
-        return parseFloat(valor.replace(',', '.'));
-    };
-
-    const precoCota = converterParaNumero(document.getElementById('precoCota').value);
-    const rendimentoMensal = converterParaNumero(document.getElementById('ultimoRendimento').value);
-    const investimentoMensal = converterParaNumero(document.getElementById('investimentoMensal').value);
-    let prazoMeses = parseInt(document.getElementById('prazoMeses').value);
+    // Obter valores dos inputs usando a nova função getNumericValue
+    const precoCota = getNumericValue(document.getElementById('precoCota').value);
+    const ultimoRendimento = getNumericValue(document.getElementById('ultimoRendimento').value);
+    const investimentoMensal = getNumericValue(document.getElementById('investimentoMensal').value);
+    const cotasIniciais = getNumericValue(document.getElementById('cotasIniciais').value);
+    let prazoMeses = getNumericValue(document.getElementById('prazoMeses').value);
     const usarReinvestimento = document.getElementById('usarReinvestimento').checked ? "sim" : "nao";
-    const cotasIniciais = parseInt(document.getElementById('cotasIniciais').value) || 0;
 
-    if (isNaN(precoCota) || isNaN(rendimentoMensal) || isNaN(investimentoMensal) || isNaN(prazoMeses)) {
-        alert('Por favor, insira valores válidos');
+    // Validação básica
+    if (precoCota <= 0 || ultimoRendimento <= 0 || investimentoMensal <= 0 || prazoMeses <= 0) {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = 'Por favor, preencha todos os campos com valores válidos maiores que zero.';
+        errorMessage.classList.add('visible');
         return;
     }
+
+    // Limpar mensagem de erro se tudo estiver OK
+    document.getElementById('error-message').classList.remove('visible');
 
     if (!isPrazoEmMeses) {
         prazoMeses = Math.round(parseFloat(prazoMeses.toString().replace(',', '.')) * 12);
     }
 
-    if (prazoMeses <= 0) {
-        mostrarErro('O prazo deve ser maior que zero');
-        return;
-    }
-
-    document.getElementById('error-message').classList.remove('visible');
-
-    const resultado = calcularInvestimento(precoCota, investimentoMensal, rendimentoMensal, prazoMeses, usarReinvestimento, cotasIniciais);
+    const resultado = calcularInvestimento(
+        precoCota, 
+        investimentoMensal, 
+        ultimoRendimento, // Corrigido: usando ultimoRendimento em vez de rendimentoMensal
+        prazoMeses, 
+        usarReinvestimento, 
+        cotasIniciais
+    );
 
     document.getElementById('resultados').style.display = 'block';
 
-    document.getElementById('prazoFinal').textContent = isPrazoEmMeses ? 
-        prazoMeses : 
-        (prazoMeses / 12).toFixed(1).replace('.', ',');
+    document.getElementById('prazoFinal').textContent = formatarPrazo(prazoMeses);
     document.getElementById('precoFinal').textContent = formatarMoeda(precoCota);
-    document.getElementById('rendimentoFinal').textContent = formatarMoeda(rendimentoMensal);
+    document.getElementById('rendimentoFinal').textContent = formatarMoeda(ultimoRendimento);
     document.getElementById('totalInvestido').textContent = formatarMoeda(resultado.totalInvestido);
     document.getElementById('totalReinvestido').textContent = formatarMoeda(resultado.totalReinvestido);
     document.getElementById('dividendosMensais').textContent = formatarMoeda(resultado.dividendosMensais);
@@ -149,6 +173,33 @@ function calcular() {
         `;
     });
 }
+
+// Adicionar listeners para formatar os inputs
+const currencyInputs = ['precoCota', 'ultimoRendimento', 'investimentoMensal'];
+currencyInputs.forEach(id => {
+    const input = document.getElementById(id);
+    input.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value === '') {
+            e.target.value = '';
+            return;
+        }
+        value = (parseFloat(value) / 100).toFixed(2);
+        e.target.value = formatCurrency(parseFloat(value));
+    });
+});
+
+// Adicionar listener para o input de cotas (apenas números inteiros)
+document.getElementById('cotasIniciais').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    e.target.value = value;
+});
+
+// Adicionar listener para o input de prazo (apenas números inteiros)
+document.getElementById('prazoMeses').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    e.target.value = value;
+});
 
 function formatarInput(event) {
     let valor = event.target.value.replace(/\D/g, '');
@@ -210,12 +261,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const cotasIniciaisInput = document.getElementById('cotasIniciais');
     cotasIniciaisInput.addEventListener('keydown', validarNumero);
 
-    window.addEventListener('scroll', () => {
+    // Remover o event listener do scroll da navbar
+    /* window.addEventListener('scroll', () => {
         const navbar = document.querySelector('.navbar');
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
-    });
+    }); */
 });
