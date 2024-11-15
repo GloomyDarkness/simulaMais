@@ -1,10 +1,10 @@
-function calcularInvestimento(precoCota, investimentoMensal, rendimentoMensal, prazoMeses, usarReinvestimento) {
+function calcularInvestimento(precoCota, investimentoMensal, rendimentoMensal, prazoMeses, usarReinvestimento, cotasIniciais = 0) {
     let totalInvestido = investimentoMensal * prazoMeses;
     let totalReinvestido = 0;
-    let numCotas = 0;
+    let numCotas = cotasIniciais;
     let saldoAcumulado = 0;
     let dividendosMensais = 0;
-    let detalhesInvestimento = []; // Array para armazenar detalhes mensais
+    let detalhesInvestimento = [];
 
     for (let mes = 1; mes <= prazoMeses; mes++) {
         saldoAcumulado += investimentoMensal;
@@ -12,21 +12,16 @@ function calcularInvestimento(precoCota, investimentoMensal, rendimentoMensal, p
         let cotasCompradas = Math.floor(saldoAcumulado / precoCota);
         numCotas += cotasCompradas;
         
-        // Calcula o valor que sobrou da compra de cotas
         let sobraInvestimento = saldoAcumulado - (cotasCompradas * precoCota);
         
-        // Calcula dividendos com base no número de cotas atuais
         let dividendos = numCotas * rendimentoMensal;
         
-        // Reinvestimento é a soma da sobra do investimento com os dividendos
         let reinvestimento = sobraInvestimento + dividendos;
 
-        // Soma os dividendos ao total reinvestido se usarReinvestimento for "sim"
         if (usarReinvestimento === "sim") {
             totalReinvestido += dividendos;
         }
 
-        // Armazena detalhes do mês atual
         detalhesInvestimento.push({
             mes,
             cotas: numCotas,
@@ -35,7 +30,6 @@ function calcularInvestimento(precoCota, investimentoMensal, rendimentoMensal, p
             dividendos: dividendos
         });
 
-        // Atualiza saldo para próximo mês
         saldoAcumulado = usarReinvestimento === "sim" ? reinvestimento : sobraInvestimento;
 
         if (mes === prazoMeses) {
@@ -48,7 +42,7 @@ function calcularInvestimento(precoCota, investimentoMensal, rendimentoMensal, p
         totalInvestido: totalInvestido,
         totalReinvestido: usarReinvestimento === "sim" ? totalReinvestido : 0,
         dividendosMensais: dividendosMensais,
-        detalhesInvestimento // Adiciona detalhes ao retorno
+        detalhesInvestimento
     };
 }
 
@@ -95,11 +89,10 @@ function mostrarErro(mensagem) {
     errorDiv.classList.add('visible');
     setTimeout(() => {
         errorDiv.classList.remove('visible');
-    }, 3000); // Remove a mensagem após 3 segundos
+    }, 3000);
 }
 
 function calcular() {
-    // Função para converter string em número, aceitando vírgula ou ponto
     const converterParaNumero = (valor) => {
         return parseFloat(valor.replace(',', '.'));
     };
@@ -109,6 +102,7 @@ function calcular() {
     const investimentoMensal = converterParaNumero(document.getElementById('investimentoMensal').value);
     let prazoMeses = parseInt(document.getElementById('prazoMeses').value);
     const usarReinvestimento = document.getElementById('usarReinvestimento').checked ? "sim" : "nao";
+    const cotasIniciais = parseInt(document.getElementById('cotasIniciais').value) || 0;
 
     if (isNaN(precoCota) || isNaN(rendimentoMensal) || isNaN(investimentoMensal) || isNaN(prazoMeses)) {
         alert('Por favor, insira valores válidos');
@@ -116,7 +110,6 @@ function calcular() {
     }
 
     if (!isPrazoEmMeses) {
-        // Converte anos para meses, considerando decimais
         prazoMeses = Math.round(parseFloat(prazoMeses.toString().replace(',', '.')) * 12);
     }
 
@@ -125,15 +118,12 @@ function calcular() {
         return;
     }
 
-    // Limpa mensagem de erro se cálculo for bem sucedido
     document.getElementById('error-message').classList.remove('visible');
 
-    const resultado = calcularInvestimento(precoCota, investimentoMensal, rendimentoMensal, prazoMeses, usarReinvestimento);
+    const resultado = calcularInvestimento(precoCota, investimentoMensal, rendimentoMensal, prazoMeses, usarReinvestimento, cotasIniciais);
 
-    // Mostra o container de resultados
     document.getElementById('resultados').style.display = 'block';
 
-    // Atualiza os resultados na página
     document.getElementById('prazoFinal').textContent = isPrazoEmMeses ? 
         prazoMeses : 
         (prazoMeses / 12).toFixed(1).replace('.', ',');
@@ -145,7 +135,6 @@ function calcular() {
 
     document.querySelector('#detalhes-investimento tbody').innerHTML = '';
 
-    // Atualiza a tabela com os detalhes mensais
     const tbody = document.querySelector('#detalhes-investimento tbody');
     tbody.innerHTML = '';
     
@@ -161,25 +150,15 @@ function calcular() {
     });
 }
 
-// Função para formatar input durante digitação
 function formatarInput(event) {
-    let valor = event.target.value.replace(/\D/g, ''); // Remove tudo que não é número
-    
-    // Converte para centavos e formata
+    let valor = event.target.value.replace(/\D/g, '');
     valor = (parseFloat(valor) / 100).toFixed(2);
-    
-    // Formata com vírgula
     valor = valor.replace('.', ',');
-    
-    // Adiciona zeros à esquerda se necessário
     if (valor === '0,00') valor = '';
-    
     event.target.value = valor;
 }
 
-// Função para validar entrada de números
 function validarNumero(event) {
-    // Permite apenas números e teclas de controle
     if (!/\d/.test(event.key) && 
         event.key !== 'Backspace' && 
         event.key !== 'Delete' && 
@@ -189,10 +168,8 @@ function validarNumero(event) {
     }
 }
 
-// Modificar a função validarPrazo para aceitar decimais em anos
 function validarPrazo(event) {
     if (!isPrazoEmMeses) {
-        // Permite números, vírgula e ponto para anos
         if (!/[\d.,]/.test(event.key) && 
             event.key !== 'Backspace' && 
             event.key !== 'Delete' && 
@@ -201,13 +178,11 @@ function validarPrazo(event) {
             event.preventDefault();
         }
         
-        // Permite apenas uma vírgula ou ponto
         if ((event.key === ',' || event.key === '.') && 
             event.target.value.includes(',')) {
             event.preventDefault();
         }
     } else {
-        // Em meses, permite apenas números inteiros
         if (!/\d/.test(event.key) && 
             event.key !== 'Backspace' && 
             event.key !== 'Delete' && 
@@ -218,7 +193,6 @@ function validarPrazo(event) {
     }
 }
 
-// Adicionar eventos aos inputs
 document.addEventListener('DOMContentLoaded', () => {
     ['precoCota', 'ultimoRendimento', 'investimentoMensal'].forEach(id => {
         const input = document.getElementById(id);
@@ -226,12 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('keydown', validarNumero);
     });
 
-    // Validação específica para o prazo
     const prazoInput = document.getElementById('prazoMeses');
     prazoInput.addEventListener('input', validarPrazo);
     prazoInput.addEventListener('keydown', validarNumero);
 
-    // Adicionar evento para o botão toggle
     const toggleButton = document.getElementById('togglePrazo');
     toggleButton.addEventListener('click', togglePrazoUnidade);
+
+    const cotasIniciaisInput = document.getElementById('cotasIniciais');
+    cotasIniciaisInput.addEventListener('keydown', validarNumero);
 });

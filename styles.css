@@ -9,25 +9,10 @@
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
-/* Temas alternativos */
-[data-theme="green"] {
-    --primary-color: #059669;
-    --primary-hover: #047857;
-}
-
-[data-theme="purple"] {
-    --primary-color: #7c3aed;
-    --primary-hover: #6d28d9;
-}
 
 [data-theme="orange"] {
     --primary-color: #ea580c;
     --primary-hover: #c2410c;
-}
-
-[data-theme="red"] {
-    --primary-color: #dc2626;
-    --primary-hover: #b91c1c;
 }
 
 .theme-selector {
@@ -82,7 +67,6 @@ h1 {
     color: var(--primary-color);
 }
 
-/* Form Styles */
 .form-container {
     background-color: var(--card-bg);
     padding: 2rem;
@@ -112,6 +96,7 @@ h1 {
     flex: 1;
     min-width: 200px;
     max-width: 250px;
+    margin-bottom: 1rem;
 }
 
 .button-container {
@@ -153,7 +138,6 @@ input::placeholder {
     opacity: 0.5;
 }
 
-/* Remove as setas do input number */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -200,9 +184,8 @@ button:hover {
     background-color: var(--primary-hover);
 }
 
-/* Results Section */
 #resultados {
-    display: none; /* Inicialmente oculto */
+    display: none; 
     background-color: var(--card-bg);
     padding: 2rem;
     border-radius: 1rem;
@@ -246,7 +229,6 @@ button:hover {
     }
 }
 
-/* Remover estilos antigos não utilizados */
 .results-grid, .results-summary {
     display: none;
 }
@@ -270,7 +252,6 @@ button:hover {
     color: var(--primary-color);
 }
 
-/* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -282,19 +263,18 @@ table {
 
 th, td {
     padding: 1rem;
-    text-align: center; /* Alinha todos os textos ao centro */
+    text-align: center; 
     border-bottom: 1px solid var(--border-color);
 }
 
 td:first-child, th:first-child {
-    text-align: left; /* Mantém o texto do mês alinhado à esquerda */
+    text-align: left; 
 }
 
 tr:hover {
     background-color: var(--background);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     body {
         padding: 1rem;
@@ -345,7 +325,6 @@ tr:hover {
     }
 }
 
-/* Animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -358,7 +337,7 @@ tr:hover {
 
 .prazo-wrapper input {
     width: 100%;
-    padding-right: 85px; /* Espaço para o botão */
+    padding-right: 85px;
 }
 
 .toggle-button {
@@ -381,7 +360,6 @@ tr:hover {
     background-color: var(--primary-hover);
 }
 
-/* Remover classes antigas que não serão mais usadas */
 .prazo-container {
     display: none;
 }
