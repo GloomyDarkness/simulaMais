@@ -4,10 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Fundos Imobiliários</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-    <div class="main-container">
+    <nav class="navbar">
+        <div class="navbar-container" style="padding-left: 20px; padding-right: 20px;">
+            <a href="index.html" class="navbar-logo">Fundos Imobiliários</a>
+            <ul class="navbar-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="info.html">Informações</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="main-container" style="padding-top: 60px;">
         <h1>Simulador de Fundos Imobiliários</h1>
         <div class="form-container">
             <form id="simulator-form" onsubmit="event.preventDefault(); calcular();">
@@ -96,6 +105,6 @@
             </table>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 </html>
