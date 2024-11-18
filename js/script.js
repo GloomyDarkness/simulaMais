@@ -324,7 +324,8 @@ function validarPrazo(event) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    ['precoCota', 'ultimoRendimento', 'investimentoMensal'].forEach(id => {
+    const currencyInputs = ['precoCota', 'ultimoRendimento', 'investimentoMensal'];
+    currencyInputs.forEach(id => {
         const input = document.getElementById(id);
         input.addEventListener('input', formatarInput);
         input.addEventListener('keydown', validarNumero);
@@ -351,12 +352,12 @@ document.addEventListener('DOMContentLoaded', () => {
     resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
 
     // Implementação única do carrossel
-    const carousel = document.querySelector('.carousel');
+    const carouselElement = document.querySelector('.carousel');
     const cards = Array.from(document.querySelectorAll('.carousel-card'));
     let currentIndex = 1;
     let autoRotateInterval;
 
-    if (carousel && cards.length > 0) {
+    if (carouselElement && cards.length > 0) {
         function updateCarousel() {
             cards.forEach((card, index) => {
                 card.classList.remove('active', 'left', 'center', 'right');
@@ -416,12 +417,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Touch events
         let touchStartX = 0;
-        carousel.addEventListener('touchstart', (e) => {
+        carouselElement.addEventListener('touchstart', (e) => {
             touchStartX = e.touches[0].clientX;
             stopAutoRotate();
         });
 
-        carousel.addEventListener('touchend', (e) => {
+        carouselElement.addEventListener('touchend', (e) => {
             const touchEndX = e.changedTouches[0].clientX;
             const diff = touchStartX - touchEndX;
 
@@ -442,12 +443,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Mouse events
-        carousel.addEventListener('mouseenter', stopAutoRotate);
-        carousel.addEventListener('mouseleave', startAutoRotate);
+        carouselElement.addEventListener('mouseenter', stopAutoRotate);
+        carouselElement.addEventListener('mouseleave', startAutoRotate);
 
         // Inicialização
         updateCarousel();
         startAutoRotate();
     }
 });
-
