@@ -12,6 +12,29 @@
     <div id="navbar-container"></div>
     <div class="main-container">
       <h1>Simulador de Fundos Imobiliários</h1>
+
+      <div class="quick-tips">
+        <h3>Como começar?</h3>
+        <div class="tips-container">
+          <div class="tip">
+            <span class="tip-number">1</span>
+            <p>Insira o valor atual da cota do FII que deseja investir</p>
+          </div>
+          <div class="tip">
+            <span class="tip-number">2</span>
+            <p>Digite o último rendimento distribuído por cota</p>
+          </div>
+          <div class="tip">
+            <span class="tip-number">3</span>
+            <p>Defina quanto pretende investir mensalmente</p>
+          </div>
+          <div class="tip">
+            <span class="tip-number">4</span>
+            <p>Escolha o período de investimento desejado</p>
+          </div>
+        </div>
+      </div>
+
       <div class="form-container">
         <form
           id="simulator-form"
@@ -86,7 +109,8 @@
           <div id="error-message" class="error-message"></div>
         </form>
       </div>
-      <div id="resultados">
+
+      <div id="resultados" style="display: none;">
         <h2>Resultados</h2>
         <div class="results-container">
           <div class="results-row">
@@ -135,6 +159,26 @@
           </thead>
           <tbody></tbody>
         </table>
+      </div>
+
+      <div id="info-section" class="intro-section">
+        <div class="intro-cards">
+          <div class="intro-card">
+            <div class="card-icon">📊</div>
+            <h3>Simule seus Investimentos</h3>
+            <p>Calcule projeções de rendimentos e patrimônio em Fundos Imobiliários de forma simples e rápida.</p>
+          </div>
+          <div class="intro-card">
+            <div class="card-icon">💰</div>
+            <h3>Renda Passiva</h3>
+            <p>Descubra quanto você pode receber mensalmente em dividendos com diferentes estratégias de investimento.</p>
+          </div>
+          <div class="intro-card">
+            <div class="card-icon">📈</div>
+            <h3>Planejamento</h3>
+            <p>Acompanhe a evolução do seu patrimônio mês a mês e tome decisões mais conscientes.</p>
+          </div>
+        </div>
       </div>
     </div>
     <script src="../js/script.js"></script>

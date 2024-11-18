@@ -148,6 +148,8 @@ function calcular() {
         cotasIniciais
     );
 
+    // Ocultar seção informativa e mostrar resultados
+    document.getElementById('info-section').style.display = 'none';
     document.getElementById('resultados').style.display = 'block';
 
     document.getElementById('prazoFinal').textContent = formatarPrazo(prazoMeses);
@@ -223,6 +225,12 @@ function calcular() {
             `;
         }
     });
+}
+
+// Adicionar função para voltar à seção informativa
+function voltarParaInfo() {
+    document.getElementById('resultados').style.display = 'none';
+    document.getElementById('info-section').style.display = 'block';
 }
 
 function toggleYear(year) {
@@ -309,6 +317,73 @@ function validarPrazo(event) {
     }
 }
 
+function setupCarousel() {
+    const cards = Array.from(document.querySelectorAll('.intro-card'));
+    let currentIndex = 0;
+    let intervalId = null;
+    const ROTATION_INTERVAL = 8000; // 8 segundos
+    
+    function updateCards() {
+        cards.forEach((card, index) => {
+            card.className = 'intro-card';
+            if (index === currentIndex) {
+                card.classList.add('center');
+            } else if (index === (currentIndex + 1) % cards.length) {
+                card.classList.add('right');
+            } else {
+                card.classList.add('left');
+            }
+        });
+    }
+
+    function rotateCards(direction = 'next') {
+        if (direction === 'next') {
+            currentIndex = (currentIndex + 1) % cards.length;
+        } else {
+            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+        }
+        updateCards();
+    }
+
+    function startAutoRotation() {
+        stopAutoRotation();
+        intervalId = setInterval(() => rotateCards('next'), ROTATION_INTERVAL);
+    }
+
+    function stopAutoRotation() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    }
+
+    // Atualizar a criação dos botões de navegação
+    const createNavButton = (direction) => {
+        const button = document.createElement('button');
+        button.className = `carousel-nav ${direction}`;
+        button.innerHTML = direction === 'prev' ? '‹' : '›'; // Usando símbolos unicode
+        button.setAttribute('aria-label', direction === 'prev' ? 'Anterior' : 'Próximo');
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            rotateCards(direction === 'prev' ? 'prev' : 'next');
+            startAutoRotation();
+        });
+        return button;
+    };
+
+    const cardsContainer = document.querySelector('.intro-cards');
+    cardsContainer.appendChild(createNavButton('prev'));
+    cardsContainer.appendChild(createNavButton('next'));
+
+    // Eventos do mouse
+    cardsContainer.addEventListener('mouseenter', stopAutoRotation);
+    cardsContainer.addEventListener('mouseleave', startAutoRotation);
+
+    // Inicialização
+    updateCards();
+    startAutoRotation();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     ['precoCota', 'ultimoRendimento', 'investimentoMensal'].forEach(id => {
         const input = document.getElementById(id);
@@ -326,13 +401,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const cotasIniciaisInput = document.getElementById('cotasIniciais');
     cotasIniciaisInput.addEventListener('keydown', validarNumero);
 
-    // Remover o event listener do scroll da navbar
-    /* window.addEventListener('scroll', () => {
-        const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    }); */
+    // Adicionar botão para voltar no topo da seção de resultados
+    const resultadosSection = document.getElementById('resultados');
+    const backButton = document.createElement('button');
+    backButton.innerHTML = '← Voltar';
+    backButton.className = 'back-button';
+    backButton.onclick = voltarParaInfo;
+    resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
+
+    setupCarousel();
 });
