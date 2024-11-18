@@ -350,225 +350,104 @@ document.addEventListener('DOMContentLoaded', () => {
     backButton.onclick = voltarParaInfo;
     resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
 
-    // Implementação atualizada do carrossel
+    // Implementação única do carrossel
     const carousel = document.querySelector('.carousel');
     const cards = Array.from(document.querySelectorAll('.carousel-card'));
     let currentIndex = 1;
     let autoRotateInterval;
 
-    function updateCarouselClasses() {
+    if (carousel && cards.length > 0) {
+        function updateCarousel() {
+            cards.forEach((card, index) => {
+                card.classList.remove('active', 'left', 'center', 'right');
+                
+                if (index === currentIndex) {
+                    card.classList.add('active', 'center');
+                    card.style.opacity = '1';
+                    card.style.zIndex = '2';
+                } else if (index < currentIndex) {
+                    card.classList.add('left');
+                    card.style.opacity = '0.7';
+                    card.style.zIndex = '1';
+                } else {
+                    card.classList.add('right');
+                    card.style.opacity = '0.7';
+                    card.style.zIndex = '1';
+                }
+            });
+        }
+
+        function navigateCarousel(direction) {
+            if (direction === 'next') {
+                currentIndex = (currentIndex + 1) % cards.length;
+            } else if (direction === 'prev') {
+                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            }
+            updateCarousel();
+        }
+
+        function startAutoRotate() {
+            stopAutoRotate();
+            autoRotateInterval = setInterval(() => {
+                navigateCarousel('next');
+            }, 5000);
+        }
+
+        function stopAutoRotate() {
+            if (autoRotateInterval) {
+                clearInterval(autoRotateInterval);
+            }
+        }
+
+        // Event listeners do carrossel
         cards.forEach((card, index) => {
-            // Remove todas as classes anteriores
-            card.classList.remove('left', 'center', 'right');
-            
-            // Calcula a posição relativa considerando o loop
-            let position;
-            if (index === currentIndex) {
-                position = 'center';
-            } else if (index === (currentIndex - 1 + cards.length) % cards.length) {
-                position = 'left';
-            } else {
-                position = 'right';
+            card.addEventListener('click', () => {
+                if (index !== currentIndex) {
+                    stopAutoRotate();
+                    if (index > currentIndex) {
+                        navigateCarousel('next');
+                    } else {
+                        navigateCarousel('prev');
+                    }
+                    setTimeout(startAutoRotate, 5000);
+                }
+            });
+        });
+
+        // Touch events
+        let touchStartX = 0;
+        carousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            stopAutoRotate();
+        });
+
+        carousel.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > 50) {
+                navigateCarousel(diff > 0 ? 'next' : 'prev');
             }
             
-            // Aplica a classe correspondente
-            card.classList.add(position);
+            setTimeout(startAutoRotate, 5000);
         });
-    }
 
-    function navigateCarousel(direction) {
-        if (direction === 'next') {
-            currentIndex = (currentIndex + 1) % cards.length;
-        } else if (direction === 'prev') {
-            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-        }
-        updateCarouselClasses();
-    }
-
-    // Click listeners atualizados
-    cards.forEach((card, index) => {
-        card.addEventListener('click', () => {
-            if (index !== currentIndex) {
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
                 stopAutoRotate();
-                if (index > currentIndex) {
-                    navigateCarousel('next');
-                } else {
-                    navigateCarousel('prev');
-                }
+                navigateCarousel(e.key === 'ArrowLeft' ? 'prev' : 'next');
                 setTimeout(startAutoRotate, 5000);
             }
         });
-    });
 
-    function startAutoRotate() {
-        stopAutoRotate(); // Limpa intervalo existente
-        autoRotateInterval = setInterval(() => {
-            navigateCarousel('next');
-        }, 5000);
-    }
+        // Mouse events
+        carousel.addEventListener('mouseenter', stopAutoRotate);
+        carousel.addEventListener('mouseleave', startAutoRotate);
 
-    function stopAutoRotate() {
-        if (autoRotateInterval) {
-            clearInterval(autoRotateInterval);
-        }
-    }
-
-    // Inicialização
-    updateCarouselClasses();
-    startAutoRotate();
-
-    // Event listeners para interação
-    carousel.addEventListener('mouseenter', stopAutoRotate);
-    carousel.addEventListener('mouseleave', startAutoRotate);
-
-    // Touch events
-    let touchStartX = 0;
-    carousel.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        stopAutoRotate();
-    });
-
-    carousel.addEventListener('touchend', (e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        const diff = touchStartX - touchEndX;
-
-        if (Math.abs(diff) > 50) {
-            navigateCarousel(diff > 0 ? 'next' : 'prev');
-        }
-        
-        setTimeout(startAutoRotate, 5000);
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-            stopAutoRotate();
-            navigateCarousel(e.key === 'ArrowLeft' ? 'prev' : 'next');
-            setTimeout(startAutoRotate, 5000);
-        }
-    });
-
-    // Configuração do toggle de tema
-    const themeToggle = document.getElementById('theme-toggle');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    // Verificar tema salvo ou preferência do sistema
-    const currentTheme = localStorage.getItem('theme') || 
-                        (prefersDarkScheme.matches ? 'dark' : 'light');
-    
-    // Aplicar tema inicial
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    
-    // Listener para o botão de tema
-    themeToggle.addEventListener('click', () => {
-        const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' 
-            ? 'light' 
-            : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-    });
-
-});
-
-// Atualização da implementação do carrossel
-const carousel = document.querySelector('.carousel');
-const cards = Array.from(document.querySelectorAll('.carousel-card'));
-let currentIndex = 1;
-let autoRotateInterval;
-
-function updateCarousel() {
-    cards.forEach((card, index) => {
-        card.classList.remove('active', 'left', 'center', 'right');
-        
-        if (index === currentIndex) {
-            card.classList.add('active', 'center');
-            card.style.opacity = '1';
-            card.style.zIndex = '2';
-        } else if (index < currentIndex) {
-            card.classList.add('left');
-            card.style.opacity = '0.7';
-            card.style.zIndex = '1';
-        } else {
-            card.classList.add('right');
-            card.style.opacity = '0.7';
-            card.style.zIndex = '1';
-        }
-    });
-}
-
-function navigateCarousel(direction) {
-    const previousIndex = currentIndex;
-    
-    if (direction === 'next' && currentIndex < cards.length - 1) {
-        currentIndex++;
-    } else if (direction === 'prev' && currentIndex > 0) {
-        currentIndex--;
-    } else if (direction === 'next' && currentIndex === cards.length - 1) {
-        currentIndex = 0;
-    } else if (direction === 'prev' && currentIndex === 0) {
-        currentIndex = cards.length - 1;
-    }
-
-    if (previousIndex !== currentIndex) {
+        // Inicialização
         updateCarousel();
-    }
-}
-
-// Click events aprimorados para os cards
-cards.forEach((card, index) => {
-    card.addEventListener('click', () => {
-        if (index > currentIndex) {
-            navigateCarousel('next');
-        } else if (index < currentIndex) {
-            navigateCarousel('prev');
-        }
-    });
-});
-
-// Adicionar navegação por swipe para mobile
-let touchStartX = 0;
-let touchEndX = 0;
-
-carousel.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-});
-
-carousel.addEventListener('touchmove', (e) => {
-    touchEndX = e.touches[0].clientX;
-});
-
-carousel.addEventListener('touchend', () => {
-    if (touchStartX - touchEndX > 50) {
-        navigateCarousel('next');
-    } else if (touchEndX - touchStartX > 50) {
-        navigateCarousel('prev');
+        startAutoRotate();
     }
 });
-
-// Navegação por teclado
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') navigateCarousel('prev');
-    if (e.key === 'ArrowRight') navigateCarousel('next');
-});
-
-// Função para iniciar a rotação automática
-function startAutoRotate() {
-    autoRotateInterval = setInterval(() => {
-        navigateCarousel('next');
-    }, 5000); // Troca a cada 5 segundos
-}
-
-// Função para parar a rotação automática
-function stopAutoRotate() {
-    clearInterval(autoRotateInterval);
-}
-
-// Inicialização
-updateCarousel();
-startAutoRotate();
-
-// Parar a rotação automática ao interagir com o carrossel
-carousel.addEventListener('mouseenter', stopAutoRotate);
-carousel.addEventListener('mouseleave', startAutoRotate);
 
