@@ -24,13 +24,13 @@
     width: 300px;
     height: 300px;
     padding: 2rem;
-    background: white;
+    background: var(--card-bg);
     border-radius: 1.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-    backface-visibility: visible;
-    transform-origin: center center;
+    box-shadow: var(--shadow);
     transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
     will-change: transform, opacity;
 }
 
@@ -104,22 +104,22 @@
 
 /* Adicionar estados de transição */
 .carousel-card.left {
-    transform: translateX(-400%) rotateY(-45deg) translateZ(-400px);
-    opacity: 0.7;
+    transform: translateX(-150%) scale(0.8) translateZ(-400px);
+    opacity: 0.6;
     z-index: 1;
     transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .carousel-card.center {
-    transform: translateX(-50%) rotateY(0) translateZ(0);
+    transform: translateX(-50%) scale(1) translateZ(0);
     opacity: 1;
     z-index: 3;
     transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .carousel-card.right {
-    transform: translateX(300%) rotateY(45deg) translateZ(-400px);
-    opacity: 0.7;
+    transform: translateX(50%) scale(0.8) translateZ(-400px);
+    opacity: 0.6;
     z-index: 1;
     transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }

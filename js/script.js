@@ -354,29 +354,32 @@ document.addEventListener('DOMContentLoaded', () => {
         resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
     }
 
-    // Implementação única do carrossel
-    const carouselElement = document.querySelector('.carousel');
-    const carouselCards = Array.from(document.querySelectorAll('.carousel-card'));
-    let currentCarouselIndex = 1;
-    let carouselInterval;
+    // Implementação profissional do carrossel
+    function initializeCarousel() {
+        const carouselElement = document.querySelector('.carousel');
+        if (!carouselElement) return;
 
-    if (carouselElement && carouselCards.length > 0) {
+        const carouselCards = Array.from(document.querySelectorAll('.carousel-card'));
+        if (carouselCards.length === 0) return;
+
+        let currentCarouselIndex = 0;
+        let carouselInterval;
+        let touchStartX = 0;
+        let isDragging = false;
+
         function updateCarousel() {
             carouselCards.forEach((card, index) => {
-                card.classList.remove('active', 'left', 'center', 'right');
+                card.classList.remove('left', 'center', 'right');
                 
-                if (index === currentCarouselIndex) {
-                    card.classList.add('active', 'center');
-                    card.style.opacity = '1';
-                    card.style.zIndex = '2';
-                } else if (index < currentCarouselIndex) {
+                // Calcular posição relativa
+                const position = (index - currentCarouselIndex + carouselCards.length) % carouselCards.length;
+                
+                if (position === 0) {
+                    card.classList.add('center');
+                } else if (position === carouselCards.length - 1) {
                     card.classList.add('left');
-                    card.style.opacity = '0.7';
-                    card.style.zIndex = '1';
                 } else {
                     card.classList.add('right');
-                    card.style.opacity = '0.7';
-                    card.style.zIndex = '1';
                 }
             });
         }
@@ -384,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function navigateCarousel(direction) {
             if (direction === 'next') {
                 currentCarouselIndex = (currentCarouselIndex + 1) % carouselCards.length;
-            } else if (direction === 'prev') {
+            } else {
                 currentCarouselIndex = (currentCarouselIndex - 1 + carouselCards.length) % carouselCards.length;
             }
             updateCarousel();
@@ -392,40 +395,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function startAutoRotate() {
             stopAutoRotate();
-            carouselInterval = setInterval(() => {
-                navigateCarousel('next');
-            }, 5000);
+            carouselInterval = setInterval(() => navigateCarousel('next'), 5000);
         }
 
         function stopAutoRotate() {
             if (carouselInterval) {
                 clearInterval(carouselInterval);
+                carouselInterval = null;
             }
         }
 
-        // Event listeners do carrossel
-        carouselCards.forEach((card, index) => {
-            card.addEventListener('click', () => {
-                if (index !== currentCarouselIndex) {
-                    stopAutoRotate();
-                    if (index > currentCarouselIndex) {
-                        navigateCarousel('next');
-                    } else {
-                        navigateCarousel('prev');
-                    }
-                    setTimeout(startAutoRotate, 5000);
-                }
-            });
-        });
-
-        // Touch events
-        let touchStartX = 0;
+        // Event Listeners
         carouselElement.addEventListener('touchstart', (e) => {
             touchStartX = e.touches[0].clientX;
+            isDragging = true;
             stopAutoRotate();
-        });
+        }, { passive: true });
+
+        carouselElement.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+        }, { passive: false });
 
         carouselElement.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            
             const touchEndX = e.changedTouches[0].clientX;
             const diff = touchStartX - touchEndX;
 
@@ -433,47 +427,68 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigateCarousel(diff > 0 ? 'next' : 'prev');
             }
             
-            setTimeout(startAutoRotate, 5000);
+            isDragging = false;
+            startAutoRotate();
         });
+
+        carouselElement.addEventListener('mouseenter', stopAutoRotate);
+        carouselElement.addEventListener('mouseleave', startAutoRotate);
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
                 stopAutoRotate();
                 navigateCarousel(e.key === 'ArrowLeft' ? 'prev' : 'next');
-                setTimeout(startAutoRotate, 5000);
+                startAutoRotate();
             }
         });
 
-        // Mouse events
-        carouselElement.addEventListener('mouseenter', stopAutoRotate);
-        carouselElement.addEventListener('mouseleave', startAutoRotate);
+        // Click navigation
+        carouselCards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                if (index !== currentCarouselIndex) {
+                    stopAutoRotate();
+                    const direction = index > currentCarouselIndex ? 'next' : 'prev';
+                    navigateCarousel(direction);
+                    startAutoRotate();
+                }
+            });
+        });
 
         // Inicialização
         updateCarousel();
         startAutoRotate();
+
+        // Garantir que o carrossel continue funcionando após mudanças na visibilidade da página
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopAutoRotate();
+            } else {
+                startAutoRotate();
+            }
+        });
+
+        // Cleanup function
+        return () => {
+            stopAutoRotate();
+            document.removeEventListener('visibilitychange', startAutoRotate);
+        };
     }
 
-    // Configuração do toggle de tema
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        // Verificar tema salvo ou preferência do sistema
-        const currentTheme = localStorage.getItem('theme') || 
-                            (prefersDarkScheme.matches ? 'dark' : 'light');
-        
-        // Aplicar tema inicial
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        
-        // Listener para o botão de tema
-        themeToggle.addEventListener('click', () => {
-            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' 
-                ? 'light' 
-                : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
+    // Inicializar carrossel de forma segura com retry
+    let retries = 0;
+    const maxRetries = 5;
+
+    function tryInitializeCarousel() {
+        if (retries >= maxRetries) return;
+
+        if (document.querySelector('.carousel')) {
+            initializeCarousel();
+        } else {
+            retries++;
+            setTimeout(tryInitializeCarousel, 500);
+        }
     }
+
+    tryInitializeCarousel();
 });
