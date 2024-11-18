@@ -60,5 +60,15 @@
                 document.getElementById('navbar-container').innerHTML = data;
             });
     </script>
+    <script>
+        fetch("js/script.js")
+            .then(response => response.text())
+            .then(data => {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.text = data;
+                document.body.appendChild(script);
+            });
+    </script>
 </body>
 </html>

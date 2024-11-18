@@ -317,85 +317,6 @@ function validarPrazo(event) {
     }
 }
 
-function setupCarousel() {
-    const cards = Array.from(document.querySelectorAll('.intro-card'));
-    if (cards.length === 0) return; // Adiciona verificação para garantir que os elementos existam
-    let currentIndex = 0;
-    let intervalId = null;
-    const ROTATION_INTERVAL = 8000; // 8 segundos
-    const TRANSITION_DURATION = 3000; // 3 segundos
-
-    function updateCards() {
-        cards.forEach((card, index) => {
-            card.className = 'intro-card';
-            if (index === currentIndex) {
-                card.classList.add('center');
-            } else if (index === (currentIndex + 1) % cards.length) {
-                card.classList.add('right');
-            } else if (index === (currentIndex - 1 + cards.length) % cards.length) {
-                card.classList.add('left');
-            } else {
-                card.classList.add('hidden'); // Esconde os cards que não estão visíveis
-            }
-        });
-    }
-
-    function rotateCards(targetIndex) {
-        currentIndex = targetIndex;
-        updateCards();
-    }
-
-    function startAutoRotation() {
-        stopAutoRotation();
-        intervalId = setInterval(() => {
-            rotateCards((currentIndex + 1) % cards.length);
-        }, ROTATION_INTERVAL + TRANSITION_DURATION); // Adiciona a duração da transição ao intervalo de rotação
-    }
-
-    function stopAutoRotation() {
-        if (intervalId) {
-            clearInterval(intervalId);
-            intervalId = null;
-        }
-    }
-
-    // Adicionar evento de clique nos cards
-    cards.forEach((card, index) => {
-        card.addEventListener('click', () => {
-            stopAutoRotation();
-            rotateCards(index);
-            startAutoRotation();
-        });
-    });
-
-    // Atualizar a criação dos botões de navegação
-    const createNavButton = (direction) => {
-        const button = document.createElement('button');
-        button.className = `carousel-nav ${direction}`;
-        button.innerHTML = direction === 'prev' ? '‹' : '›'; // Usando símbolos unicode
-        button.setAttribute('aria-label', direction === 'prev' ? 'Anterior' : 'Próximo');
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            rotateCards(direction === 'prev' ? 'prev' : 'next');
-            startAutoRotation();
-        });
-        return button;
-    };
-
-    const cardsContainer = document.querySelector('.intro-cards');
-    if (!cardsContainer) return; // Adiciona verificação para garantir que o elemento exista
-    cardsContainer.appendChild(createNavButton('prev'));
-    cardsContainer.appendChild(createNavButton('next'));
-
-    // Eventos do mouse
-    cardsContainer.addEventListener('mouseenter', stopAutoRotation);
-    cardsContainer.addEventListener('mouseleave', startAutoRotation);
-
-    // Inicialização
-    updateCards();
-    startAutoRotation();
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     ['precoCota', 'ultimoRendimento', 'investimentoMensal'].forEach(id => {
         const input = document.getElementById(id);
@@ -421,5 +342,39 @@ document.addEventListener('DOMContentLoaded', () => {
     backButton.onclick = voltarParaInfo;
     resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
 
-    setupCarousel();
+    // Nova lógica do Carousel
+    const carousel = document.querySelector('.carousel');
+    const cards = document.querySelectorAll('.carousel-card');
+    
+    let currentIndex = 1; // Começa com o card do meio
+
+    function rotateCards(direction) {
+        if (direction === 'next' && currentIndex < cards.length - 1) {
+            currentIndex++;
+        } else if (direction === 'prev' && currentIndex > 0) {
+            currentIndex--;
+        }
+
+        carousel.style.transform = `translateX(-${(currentIndex - 1) * (cardWidth + 24)}px)`;
+    }
+
+    // Adicionar click listeners nos cards
+    cards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+            if (index < currentIndex) {
+                rotateCards('prev');
+            } else if (index > currentIndex) {
+                rotateCards('next');
+            }
+        });
+    });
+
+    // Remover os event listeners antigos dos botões
+    const prevBtn = document.querySelector('.carousel-nav.prev');
+    const nextBtn = document.querySelector('.carousel-nav.next');
+    if (prevBtn) prevBtn.remove();
+    if (nextBtn) nextBtn.remove();
+
+    // Initialize carousel
+    updateCarouselMetrics();
 });

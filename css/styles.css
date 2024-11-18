@@ -639,115 +639,6 @@ button:hover {
     padding: 0 1rem;
 }
 
-.intro-cards {
-    position: relative;
-    height: 400px; /* Ajuste conforme necessário */
-    perspective: 1000px;
-    margin: 2rem auto;
-    display: flex;
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
-    width: 100%; /* Garante largura total */
-    overflow: hidden; /* Esconde overflow para transições suaves */
-}
-
-.intro-card {
-    position: absolute;
-    width: calc(33.333% - 2rem);
-    transition: transform 3s ease, opacity 3s ease; /* Aumenta a duração da transição para 3 segundos */
-    opacity: 0.7;
-    transform-style: preserve-3d;
-    cursor: pointer; /* Adiciona cursor de ponteiro para indicar que é clicável */
-}
-
-.intro-card.left {
-    left: 0;
-    transform: translateX(-30%) scale(0.9);
-}
-
-.intro-card.center {
-    left: 50%;
-    transform: translateX(-50%) scale(1) !important; /* Forçar transformação fixa */
-    opacity: 1;
-    z-index: 1;
-    cursor: default;
-    pointer-events: none; /* Desabilitar interações com o mouse */
-}
-
-.intro-card.right {
-    right: 0;
-    transform: translateX(30%) scale(0.9);
-}
-
-.intro-card.left:hover {
-    transform: translateX(-20%) scale(0.9); /* Move o card da esquerda um pouco para a direita */
-}
-
-.intro-card.right:hover {
-    transform: translateX(20%) scale(0.9); /* Move o card da direita um pouco para a esquerda */
-}
-
-/* Remover o hover genérico do .intro-card */
-.intro-card:hover {
-    transform: none;
-}
-
-/* Remover os botões de navegação */
-.carousel-nav {
-    display: none;
-}
-
-@media (max-width: 1024px) {
-    .intro-cards {
-        height: auto;
-        perspective: none;
-    }
-
-    .intro-card {
-        position: static;
-        width: 100%;
-        opacity: 1;
-        transform: none !important;
-        margin-bottom: 1rem;
-    }
-}
-
-.intro-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.intro-card {
-    background: var(--card-bg);
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: var(--shadow);
-    text-align: center;
-    transition: transform 0.2s ease;
-}
-
-.intro-card:hover {
-    transform: translateY(-5px);
-}
-
-.card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.intro-card h3 {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    font-size: 1.25rem;
-}
-
-.intro-card p {
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-
 .quick-tips {
     background: var(--card-bg);
     padding: 2rem;
@@ -795,20 +686,12 @@ button:hover {
 }
 
 @media (max-width: 1024px) {
-    .intro-cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
     .tips-container {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 768px) {
-    .intro-cards {
-        grid-template-columns: 1fr;
-    }
-    
     .tips-container {
         grid-template-columns: 1fr;
     }
@@ -850,7 +733,6 @@ button:hover {
     border-top: 1px solid var(--border-color);
 }
 
-/* Ajustes de responsividade */
 @media (max-width: 768px) {
     body {
         padding: 0.5rem;

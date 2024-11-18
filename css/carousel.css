@@ -1,0 +1,138 @@
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+    overflow: hidden;
+}
+
+.carousel {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 1.5rem;
+    will-change: transform;
+}
+
+.carousel-card {
+    min-width: calc(33.333% - 1rem);
+    flex: 1;
+    padding: 2rem;
+    position: relative;
+    cursor: pointer;
+    transform-origin: center center;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-card:nth-child(2) {
+    transform: scale(1.1);
+    z-index: 2;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+}
+
+.carousel-card:not(:nth-child(2)) {
+    transform: scale(0.8);
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.carousel-card:not(:nth-child(2)):hover {
+    opacity: 0.8;
+    transform: scale(0.85);
+}
+
+.carousel-card.active {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+    opacity: 1;
+    cursor: default;
+}
+
+.carousel-card:not(.active) {
+    transform: scale(0.8);
+    opacity: 0.5;
+    filter: blur(1px);
+}
+
+.carousel-card:not(.active):hover {
+    opacity: 0.8;
+    filter: blur(0);
+    transform: scale(0.85);
+}
+
+.card-content {
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.carousel-card.active .card-icon {
+    transform: scale(1.1);
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    opacity: 0.3;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--primary-color);
+    opacity: 1;
+}
+
+/* Remover os estilos dos botões de navegação */
+.carousel-nav {
+    display: none;
+}
+
+.carousel-nav:hover {
+    background: var(--primary-hover);
+}
+
+.carousel-nav.prev {
+    left: 0;
+}
+
+.carousel-nav.next {
+    right: 0;
+}
+
+@media (max-width: 1024px) {
+    .carousel-card {
+        min-width: calc(50% - 0.75rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-card {
+        min-width: calc(100% - 1rem);
+    }
+    
+    .carousel-container {
+        padding: 1rem 0;
+    }
+}

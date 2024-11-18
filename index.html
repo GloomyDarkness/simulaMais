@@ -7,38 +7,7 @@
     <link rel="stylesheet" href="css/scrollbar.css">
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/navbar.css" />
-    <style>
-      @media (max-width: 768px) {
-        .intro-cards {
-          display: flex;
-          overflow: hidden;
-          justify-content: center;
-          position: relative;
-        }
-        .intro-card {
-          flex: 0 0 80%;
-          margin: 0 10px;
-          transition: transform 0.3s ease;
-        }
-        .intro-cards::before,
-        .intro-cards::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          width: 10px;
-          background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-          z-index: 1;
-        }
-        .intro-cards::before {
-          left: 0;
-        }
-        .intro-cards::after {
-          right: 0;
-          background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="css/carousel.css">
   </head>
   <body>
     <div id="navbar-container"></div>
@@ -142,7 +111,7 @@
         </form>
       </div>
 
-      <div id="resultados" style="display: none;">
+      <div id="resultados">
         <h2>Resultados</h2>
         <div class="results-container">
           <div class="results-row">
@@ -194,31 +163,44 @@
       </div>
 
       <div id="info-section" class="intro-section">
-        <div class="intro-cards">
-          <div class="intro-card">
-            <div class="card-icon">📊</div>
-            <h3>Simule seus Investimentos</h3>
-            <p>Calcule projeções de rendimentos e patrimônio em Fundos Imobiliários de forma simples e rápida.</p>
+        <div class="carousel-container">
+          <div class="carousel">
+            <div class="carousel-card">
+              <div class="card-icon">📊</div>
+              <h3>Simule seus Investimentos</h3>
+              <p>Calcule projeções de rendimentos e patrimônio em Fundos Imobiliários de forma simples e rápida.</p>
+            </div>
+            <div class="carousel-card">
+              <div class="card-icon">💰</div>
+              <h3>Renda Passiva</h3>
+              <p>Descubra quanto você pode receber mensalmente em dividendos com diferentes estratégias de investimento.</p>
+            </div>
+            <div class="carousel-card">
+              <div class="card-icon">📈</div>
+              <h3>Planejamento</h3>
+              <p>Acompanhe a evolução do seu patrimônio mês a mês e tome decisões mais conscientes.</p>
+            </div>
           </div>
-          <div class="intro-card">
-            <div class="card-icon">💰</div>
-            <h3>Renda Passiva</h3>
-            <p>Descubra quanto você pode receber mensalmente em dividendos com diferentes estratégias de investimento.</p>
-          </div>
-          <div class="intro-card">
-            <div class="card-icon">📈</div>
-            <h3>Planejamento</h3>
-            <p>Acompanhe a evolução do seu patrimônio mês a mês e tome decisões mais conscientes.</p>
-          </div>
+          <button class="carousel-nav prev">‹</button>
+          <button class="carousel-nav next">›</button>
         </div>
       </div>
     </div>
-    <script src="js/script.js"></script>
     <script>
       fetch("components/navbar.html")
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navbar-container").innerHTML = data;
+        });
+    </script>
+    <script>
+      fetch("js/script.js")
+        .then(response => response.text())
+        .then(data => {
+          const script = document.createElement("script");
+          script.type = "text/javascript";
+          script.text = data;
+          document.body.appendChild(script);
         });
     </script>
   </body>
