@@ -342,39 +342,104 @@ document.addEventListener('DOMContentLoaded', () => {
     backButton.onclick = voltarParaInfo;
     resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
 
-    // Nova lógica do Carousel
+    // Atualização da implementação do carrossel
     const carousel = document.querySelector('.carousel');
-    const cards = document.querySelectorAll('.carousel-card');
-    
-    let currentIndex = 1; // Começa com o card do meio
+    const cards = Array.from(document.querySelectorAll('.carousel-card'));
+    let currentIndex = 1;
+    let autoRotateInterval;
 
-    function rotateCards(direction) {
+    function updateCarousel() {
+        cards.forEach((card, index) => {
+            card.classList.remove('active', 'left', 'center', 'right');
+            
+            if (index === currentIndex) {
+                card.classList.add('active', 'center');
+                card.style.opacity = '1';
+                card.style.zIndex = '2';
+            } else if (index < currentIndex) {
+                card.classList.add('left');
+                card.style.opacity = '0.7';
+                card.style.zIndex = '1';
+            } else {
+                card.classList.add('right');
+                card.style.opacity = '0.7';
+                card.style.zIndex = '1';
+            }
+        });
+    }
+
+    function navigateCarousel(direction) {
+        const previousIndex = currentIndex;
+        
         if (direction === 'next' && currentIndex < cards.length - 1) {
             currentIndex++;
         } else if (direction === 'prev' && currentIndex > 0) {
             currentIndex--;
+        } else if (direction === 'next' && currentIndex === cards.length - 1) {
+            currentIndex = 0;
+        } else if (direction === 'prev' && currentIndex === 0) {
+            currentIndex = cards.length - 1;
         }
 
-        carousel.style.transform = `translateX(-${(currentIndex - 1) * (cardWidth + 24)}px)`;
+        if (previousIndex !== currentIndex) {
+            updateCarousel();
+        }
     }
 
-    // Adicionar click listeners nos cards
+    // Click events aprimorados para os cards
     cards.forEach((card, index) => {
         card.addEventListener('click', () => {
-            if (index < currentIndex) {
-                rotateCards('prev');
-            } else if (index > currentIndex) {
-                rotateCards('next');
+            if (index > currentIndex) {
+                navigateCarousel('next');
+            } else if (index < currentIndex) {
+                navigateCarousel('prev');
             }
         });
     });
 
-    // Remover os event listeners antigos dos botões
-    const prevBtn = document.querySelector('.carousel-nav.prev');
-    const nextBtn = document.querySelector('.carousel-nav.next');
-    if (prevBtn) prevBtn.remove();
-    if (nextBtn) nextBtn.remove();
+    // Adicionar navegação por swipe para mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
 
-    // Initialize carousel
-    updateCarouselMetrics();
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+    });
+
+    carousel.addEventListener('touchmove', (e) => {
+        touchEndX = e.touches[0].clientX;
+    });
+
+    carousel.addEventListener('touchend', () => {
+        if (touchStartX - touchEndX > 50) {
+            navigateCarousel('next');
+        } else if (touchEndX - touchStartX > 50) {
+            navigateCarousel('prev');
+        }
+    });
+
+    // Navegação por teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') navigateCarousel('prev');
+        if (e.key === 'ArrowRight') navigateCarousel('next');
+    });
+
+    // Função para iniciar a rotação automática
+    function startAutoRotate() {
+        autoRotateInterval = setInterval(() => {
+            navigateCarousel('next');
+        }, 5000); // Troca a cada 5 segundos
+    }
+
+    // Função para parar a rotação automática
+    function stopAutoRotate() {
+        clearInterval(autoRotateInterval);
+    }
+
+    // Inicialização
+    updateCarousel();
+    startAutoRotate();
+
+    // Parar a rotação automática ao interagir com o carrossel
+    carousel.addEventListener('mouseenter', stopAutoRotate);
+    carousel.addEventListener('mouseleave', startAutoRotate);
 });
