@@ -353,20 +353,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Implementação única do carrossel
     const carouselElement = document.querySelector('.carousel');
-    const cards = Array.from(document.querySelectorAll('.carousel-card'));
-    let currentIndex = 1;
-    let autoRotateInterval;
+    const carouselCards = Array.from(document.querySelectorAll('.carousel-card'));
+    let currentCarouselIndex = 1;
+    let carouselInterval;
 
-    if (carouselElement && cards.length > 0) {
+    if (carouselElement && carouselCards.length > 0) {
         function updateCarousel() {
-            cards.forEach((card, index) => {
+            carouselCards.forEach((card, index) => {
                 card.classList.remove('active', 'left', 'center', 'right');
                 
-                if (index === currentIndex) {
+                if (index === currentCarouselIndex) {
                     card.classList.add('active', 'center');
                     card.style.opacity = '1';
                     card.style.zIndex = '2';
-                } else if (index < currentIndex) {
+                } else if (index < currentCarouselIndex) {
                     card.classList.add('left');
                     card.style.opacity = '0.7';
                     card.style.zIndex = '1';
@@ -380,32 +380,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function navigateCarousel(direction) {
             if (direction === 'next') {
-                currentIndex = (currentIndex + 1) % cards.length;
+                currentCarouselIndex = (currentCarouselIndex + 1) % carouselCards.length;
             } else if (direction === 'prev') {
-                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+                currentCarouselIndex = (currentCarouselIndex - 1 + carouselCards.length) % carouselCards.length;
             }
             updateCarousel();
         }
 
         function startAutoRotate() {
             stopAutoRotate();
-            autoRotateInterval = setInterval(() => {
+            carouselInterval = setInterval(() => {
                 navigateCarousel('next');
             }, 5000);
         }
 
         function stopAutoRotate() {
-            if (autoRotateInterval) {
-                clearInterval(autoRotateInterval);
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
             }
         }
 
         // Event listeners do carrossel
-        cards.forEach((card, index) => {
+        carouselCards.forEach((card, index) => {
             card.addEventListener('click', () => {
-                if (index !== currentIndex) {
+                if (index !== currentCarouselIndex) {
                     stopAutoRotate();
-                    if (index > currentIndex) {
+                    if (index > currentCarouselIndex) {
                         navigateCarousel('next');
                     } else {
                         navigateCarousel('prev');
