@@ -324,32 +324,35 @@ function validarPrazo(event) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const currencyInputs = ['precoCota', 'ultimoRendimento', 'investimentoMensal'];
-    currencyInputs.forEach(id => {
-        const input = document.getElementById(id);
-        input.addEventListener('input', formatarInput);
-        input.addEventListener('keydown', validarNumero);
-    });
-
-    const prazoInput = document.getElementById('prazoMeses');
-    prazoInput.addEventListener('input', validarPrazo);
-    prazoInput.addEventListener('keydown', validarNumero);
-
-    const toggleButton = document.getElementById('togglePrazo');
-    if (toggleButton) {
-        toggleButton.addEventListener('click', togglePrazoUnidade);
+    // Função auxiliar para adicionar event listener com verificação de null
+    function addSafeEventListener(elementId, eventType, handler) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.addEventListener(eventType, handler);
+        }
     }
 
-    const cotasIniciaisInput = document.getElementById('cotasIniciais');
-    cotasIniciaisInput.addEventListener('keydown', validarNumero);
+    // Adiciona listeners para inputs monetários
+    ['precoCota', 'ultimoRendimento', 'investimentoMensal'].forEach(id => {
+        addSafeEventListener(id, 'input', formatarInput);
+        addSafeEventListener(id, 'keydown', validarNumero);
+    });
 
-    // Adicionar botão para voltar no topo da seção de resultados
+    // Adiciona listeners para outros inputs
+    addSafeEventListener('prazoMeses', 'input', validarPrazo);
+    addSafeEventListener('prazoMeses', 'keydown', validarNumero);
+    addSafeEventListener('togglePrazo', 'click', togglePrazoUnidade);
+    addSafeEventListener('cotasIniciais', 'keydown', validarNumero);
+
+    // Adiciona botão voltar apenas se a seção de resultados existir
     const resultadosSection = document.getElementById('resultados');
-    const backButton = document.createElement('button');
-    backButton.innerHTML = '← Voltar';
-    backButton.className = 'back-button';
-    backButton.onclick = voltarParaInfo;
-    resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
+    if (resultadosSection) {
+        const backButton = document.createElement('button');
+        backButton.innerHTML = '← Voltar';
+        backButton.className = 'back-button';
+        backButton.onclick = voltarParaInfo;
+        resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
+    }
 
     // Implementação única do carrossel
     const carouselElement = document.querySelector('.carousel');
@@ -449,5 +452,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // Inicialização
         updateCarousel();
         startAutoRotate();
+    }
+
+    // Configuração do toggle de tema
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        // Verificar tema salvo ou preferência do sistema
+        const currentTheme = localStorage.getItem('theme') || 
+                            (prefersDarkScheme.matches ? 'dark' : 'light');
+        
+        // Aplicar tema inicial
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        
+        // Listener para o botão de tema
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' 
+                ? 'light' 
+                : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
     }
 });
