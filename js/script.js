@@ -473,8 +473,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Atualização da implementação do carrossel
 const carousel = document.querySelector('.carousel');
-// Atualização da implementação do carrossel
-const carousel = document.querySelector('.carousel');
 const cards = Array.from(document.querySelectorAll('.carousel-card'));
 let currentIndex = 1;
 let autoRotateInterval;
@@ -573,3 +571,4 @@ startAutoRotate();
 // Parar a rotação automática ao interagir com o carrossel
 carousel.addEventListener('mouseenter', stopAutoRotate);
 carousel.addEventListener('mouseleave', startAutoRotate);
+
