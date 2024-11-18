@@ -1,4 +1,9 @@
+/*====================
+    VARIÁVEIS DE TEMA
+====================*/
+
 :root {
+    /* Tema Claro (Padrão) */
     --primary-color: #ea580c;
     --primary-hover: #c2410c;
     --background: #f8fafc;
@@ -9,6 +14,162 @@
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
+[data-theme="dark"] {
+    /* Tema Escuro */
+    --primary-color: #fb923c;
+    --primary-hover: #ea580c;
+    --background: #1e1e1e;
+    --card-bg: #2d2d2d;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --border-color: #404040;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+}
+
+/*====================
+    CONFIGURAÇÕES GERAIS
+====================*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-top: 70px;
+    padding: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/*====================
+    CONTAINERS
+====================*/
+
+.main-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.form-container {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 3rem;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+/*====================
+    CABEÇALHOS E TEXTOS
+====================*/
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+}
+
+/*====================
+    FORMULÁRIOS E INPUTS
+====================*/
+
+.input-container {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.input-group {
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+    margin-bottom: 1rem;
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+input {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    width: 100%;
+    text-align: right;
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+}
+
+/*====================
+    BOTÕES
+====================*/
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    max-width: 200px;
+    margin: 1rem auto;
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+}
+
+/*====================
+    TOGGLE DE TEMA
+====================*/
+
+.theme-toggle {
+    position: static;
+    box-shadow: none;
+    margin: 0;
+    max-width: none;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
 
 [data-theme="orange"] {
     --primary-color: #ea580c;
@@ -217,7 +378,7 @@ button:hover {
 
 #resultados h2 {
     text-align: center;
-    color: var(--primary-color);
+    color: var (--primary-color);
     margin-bottom: 2rem;
 }
 

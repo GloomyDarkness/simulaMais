@@ -61,19 +61,25 @@ function togglePrazoUnidade() {
     
     if (isPrazoEmMeses) {
         botao.textContent = 'Meses';
-        prazoFinalLabel.textContent = 'Meses';
         if (input.value) {
-            input.value = Math.round(parseFloat(input.value.replace(',', '.')) * 12);
+            // Converter anos para meses
+            const valor = parseFloat(input.value.replace(',', '.'));
+            input.value = Math.round(valor * 12);
         }
     } else {
         botao.textContent = 'Anos';
-        prazoFinalLabel.textContent = 'Anos';
         if (input.value) {
+            // Converter meses para anos
             const anos = parseFloat(input.value) / 12;
             input.value = Number.isInteger(anos) ? 
                 anos.toString() : 
                 anos.toFixed(1).replace('.', ',');
         }
+    }
+
+    // Atualizar o texto da unidade nos resultados
+    if (prazoFinalLabel) {
+        prazoFinalLabel.textContent = isPrazoEmMeses ? 'Meses' : 'Anos';
     }
 }
 
@@ -329,7 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
     prazoInput.addEventListener('keydown', validarNumero);
 
     const toggleButton = document.getElementById('togglePrazo');
-    toggleButton.addEventListener('click', togglePrazoUnidade);
+    if (toggleButton) {
+        toggleButton.addEventListener('click', togglePrazoUnidade);
+    }
 
     const cotasIniciaisInput = document.getElementById('cotasIniciais');
     cotasIniciaisInput.addEventListener('keydown', validarNumero);
@@ -342,104 +350,226 @@ document.addEventListener('DOMContentLoaded', () => {
     backButton.onclick = voltarParaInfo;
     resultadosSection.insertBefore(backButton, resultadosSection.firstChild);
 
-    // Atualização da implementação do carrossel
+    // Implementação atualizada do carrossel
     const carousel = document.querySelector('.carousel');
     const cards = Array.from(document.querySelectorAll('.carousel-card'));
     let currentIndex = 1;
     let autoRotateInterval;
 
-    function updateCarousel() {
+    function updateCarouselClasses() {
         cards.forEach((card, index) => {
-            card.classList.remove('active', 'left', 'center', 'right');
+            // Remove todas as classes anteriores
+            card.classList.remove('left', 'center', 'right');
             
+            // Calcula a posição relativa considerando o loop
+            let position;
             if (index === currentIndex) {
-                card.classList.add('active', 'center');
-                card.style.opacity = '1';
-                card.style.zIndex = '2';
-            } else if (index < currentIndex) {
-                card.classList.add('left');
-                card.style.opacity = '0.7';
-                card.style.zIndex = '1';
+                position = 'center';
+            } else if (index === (currentIndex - 1 + cards.length) % cards.length) {
+                position = 'left';
             } else {
-                card.classList.add('right');
-                card.style.opacity = '0.7';
-                card.style.zIndex = '1';
+                position = 'right';
             }
+            
+            // Aplica a classe correspondente
+            card.classList.add(position);
         });
     }
 
     function navigateCarousel(direction) {
-        const previousIndex = currentIndex;
-        
-        if (direction === 'next' && currentIndex < cards.length - 1) {
-            currentIndex++;
-        } else if (direction === 'prev' && currentIndex > 0) {
-            currentIndex--;
-        } else if (direction === 'next' && currentIndex === cards.length - 1) {
-            currentIndex = 0;
-        } else if (direction === 'prev' && currentIndex === 0) {
-            currentIndex = cards.length - 1;
+        if (direction === 'next') {
+            currentIndex = (currentIndex + 1) % cards.length;
+        } else if (direction === 'prev') {
+            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
         }
-
-        if (previousIndex !== currentIndex) {
-            updateCarousel();
-        }
+        updateCarouselClasses();
     }
 
-    // Click events aprimorados para os cards
+    // Click listeners atualizados
     cards.forEach((card, index) => {
         card.addEventListener('click', () => {
-            if (index > currentIndex) {
-                navigateCarousel('next');
-            } else if (index < currentIndex) {
-                navigateCarousel('prev');
+            if (index !== currentIndex) {
+                stopAutoRotate();
+                if (index > currentIndex) {
+                    navigateCarousel('next');
+                } else {
+                    navigateCarousel('prev');
+                }
+                setTimeout(startAutoRotate, 5000);
             }
         });
     });
 
-    // Adicionar navegação por swipe para mobile
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    carousel.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-    });
-
-    carousel.addEventListener('touchmove', (e) => {
-        touchEndX = e.touches[0].clientX;
-    });
-
-    carousel.addEventListener('touchend', () => {
-        if (touchStartX - touchEndX > 50) {
-            navigateCarousel('next');
-        } else if (touchEndX - touchStartX > 50) {
-            navigateCarousel('prev');
-        }
-    });
-
-    // Navegação por teclado
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') navigateCarousel('prev');
-        if (e.key === 'ArrowRight') navigateCarousel('next');
-    });
-
-    // Função para iniciar a rotação automática
     function startAutoRotate() {
+        stopAutoRotate(); // Limpa intervalo existente
         autoRotateInterval = setInterval(() => {
             navigateCarousel('next');
-        }, 5000); // Troca a cada 5 segundos
+        }, 5000);
     }
 
-    // Função para parar a rotação automática
     function stopAutoRotate() {
-        clearInterval(autoRotateInterval);
+        if (autoRotateInterval) {
+            clearInterval(autoRotateInterval);
+        }
     }
 
     // Inicialização
-    updateCarousel();
+    updateCarouselClasses();
     startAutoRotate();
 
-    // Parar a rotação automática ao interagir com o carrossel
+    // Event listeners para interação
     carousel.addEventListener('mouseenter', stopAutoRotate);
     carousel.addEventListener('mouseleave', startAutoRotate);
+
+    // Touch events
+    let touchStartX = 0;
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        stopAutoRotate();
+    });
+
+    carousel.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > 50) {
+            navigateCarousel(diff > 0 ? 'next' : 'prev');
+        }
+        
+        setTimeout(startAutoRotate, 5000);
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            stopAutoRotate();
+            navigateCarousel(e.key === 'ArrowLeft' ? 'prev' : 'next');
+            setTimeout(startAutoRotate, 5000);
+        }
+    });
+
+    // Configuração do toggle de tema
+    const themeToggle = document.getElementById('theme-toggle');
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Verificar tema salvo ou preferência do sistema
+    const currentTheme = localStorage.getItem('theme') || 
+                        (prefersDarkScheme.matches ? 'dark' : 'light');
+    
+    // Aplicar tema inicial
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    
+    // Listener para o botão de tema
+    themeToggle.addEventListener('click', () => {
+        const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' 
+            ? 'light' 
+            : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+
 });
+
+// Atualização da implementação do carrossel
+const carousel = document.querySelector('.carousel');
+// Atualização da implementação do carrossel
+const carousel = document.querySelector('.carousel');
+const cards = Array.from(document.querySelectorAll('.carousel-card'));
+let currentIndex = 1;
+let autoRotateInterval;
+
+function updateCarousel() {
+    cards.forEach((card, index) => {
+        card.classList.remove('active', 'left', 'center', 'right');
+        
+        if (index === currentIndex) {
+            card.classList.add('active', 'center');
+            card.style.opacity = '1';
+            card.style.zIndex = '2';
+        } else if (index < currentIndex) {
+            card.classList.add('left');
+            card.style.opacity = '0.7';
+            card.style.zIndex = '1';
+        } else {
+            card.classList.add('right');
+            card.style.opacity = '0.7';
+            card.style.zIndex = '1';
+        }
+    });
+}
+
+function navigateCarousel(direction) {
+    const previousIndex = currentIndex;
+    
+    if (direction === 'next' && currentIndex < cards.length - 1) {
+        currentIndex++;
+    } else if (direction === 'prev' && currentIndex > 0) {
+        currentIndex--;
+    } else if (direction === 'next' && currentIndex === cards.length - 1) {
+        currentIndex = 0;
+    } else if (direction === 'prev' && currentIndex === 0) {
+        currentIndex = cards.length - 1;
+    }
+
+    if (previousIndex !== currentIndex) {
+        updateCarousel();
+    }
+}
+
+// Click events aprimorados para os cards
+cards.forEach((card, index) => {
+    card.addEventListener('click', () => {
+        if (index > currentIndex) {
+            navigateCarousel('next');
+        } else if (index < currentIndex) {
+            navigateCarousel('prev');
+        }
+    });
+});
+
+// Adicionar navegação por swipe para mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+carousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+});
+
+carousel.addEventListener('touchmove', (e) => {
+    touchEndX = e.touches[0].clientX;
+});
+
+carousel.addEventListener('touchend', () => {
+    if (touchStartX - touchEndX > 50) {
+        navigateCarousel('next');
+    } else if (touchEndX - touchStartX > 50) {
+        navigateCarousel('prev');
+    }
+});
+
+// Navegação por teclado
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') navigateCarousel('prev');
+    if (e.key === 'ArrowRight') navigateCarousel('next');
+});
+
+// Função para iniciar a rotação automática
+function startAutoRotate() {
+    autoRotateInterval = setInterval(() => {
+        navigateCarousel('next');
+    }, 5000); // Troca a cada 5 segundos
+}
+
+// Função para parar a rotação automática
+function stopAutoRotate() {
+    clearInterval(autoRotateInterval);
+}
+
+// Inicialização
+updateCarousel();
+startAutoRotate();
+
+// Parar a rotação automática ao interagir com o carrossel
+carousel.addEventListener('mouseenter', stopAutoRotate);
+carousel.addEventListener('mouseleave', startAutoRotate);

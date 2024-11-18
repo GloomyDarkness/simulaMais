@@ -29,8 +29,18 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
     backface-visibility: visible;
     transform-origin: center center;
-    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
+    will-change: transform, opacity;
+}
+
+/* Remove os posicionamentos estáticos anteriores */
+.carousel-card:nth-child(1),
+.carousel-card:nth-child(2),
+.carousel-card:nth-child(3) {
+    position: absolute;
+    left: 50%;
+    transform-origin: center center;
 }
 
 /* Posicionamento específico para cada card */
@@ -94,15 +104,24 @@
 
 /* Adicionar estados de transição */
 .carousel-card.left {
-    transform: translateX(-300%) rotateY(-45deg) translateZ(-400px) !important;
+    transform: translateX(-400%) rotateY(-45deg) translateZ(-400px);
+    opacity: 0.7;
+    z-index: 1;
+    transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .carousel-card.center {
-    transform: translateX(-50%) rotateY(0) translateZ(0) !important;
+    transform: translateX(-50%) rotateY(0) translateZ(0);
+    opacity: 1;
+    z-index: 3;
+    transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .carousel-card.right {
-    transform: translateX(200%) rotateY(45deg) translateZ(-400px) !important;
+    transform: translateX(300%) rotateY(45deg) translateZ(-400px);
+    opacity: 0.7;
+    z-index: 1;
+    transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 @media (max-width: 1024px) {
@@ -145,10 +164,10 @@
     }
 
     .carousel-card.left {
-        transform: translateX(-200%) rotateY(-45deg) translateZ(-300px) !important;
+        transform: translateX(-250%) rotateY(-45deg) translateZ(-300px);
     }
 
     .carousel-card.right {
-        transform: translateX(100%) rotateY(45deg) translateZ(-300px) !important;
+        transform: translateX(150%) rotateY(45deg) translateZ(-300px);
     }
 }
