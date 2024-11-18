@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simulador de Fundos Imobiliários</title>
-    <link rel="stylesheet" href="../css/scrollbar.css">
-    <link rel="stylesheet" href="../css/styles.css" />
-    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="css/scrollbar.css">
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
   </head>
   <body>
     <div id="navbar-container"></div>
@@ -181,9 +181,9 @@
         </div>
       </div>
     </div>
-    <script src="../js/script.js"></script>
+    <script src="js/script.js"></script>
     <script>
-      fetch("../components/navbar.html")
+      fetch("components/navbar.html")
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navbar-container").innerHTML = data;

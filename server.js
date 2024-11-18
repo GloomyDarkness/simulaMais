@@ -9,12 +9,12 @@ app.use(express.static(path.join(__dirname, 'src')));
 
 // Rota para a página inicial
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/html/index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Rota para a página de informações
 app.get('/info', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/html/info.html'));
+    res.sendFile(path.join(__dirname, 'info.html'));
 });
 
 // Inicia o servidor

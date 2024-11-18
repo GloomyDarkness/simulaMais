@@ -322,7 +322,8 @@ function setupCarousel() {
     let currentIndex = 0;
     let intervalId = null;
     const ROTATION_INTERVAL = 8000; // 8 segundos
-    
+    const TRANSITION_DURATION = 3000; // 3 segundos
+
     function updateCards() {
         cards.forEach((card, index) => {
             card.className = 'intro-card';
@@ -330,24 +331,24 @@ function setupCarousel() {
                 card.classList.add('center');
             } else if (index === (currentIndex + 1) % cards.length) {
                 card.classList.add('right');
-            } else {
+            } else if (index === (currentIndex - 1 + cards.length) % cards.length) {
                 card.classList.add('left');
+            } else {
+                card.classList.add('hidden'); // Esconde os cards que não estão visíveis
             }
         });
     }
 
-    function rotateCards(direction = 'next') {
-        if (direction === 'next') {
-            currentIndex = (currentIndex + 1) % cards.length;
-        } else {
-            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-        }
+    function rotateCards(targetIndex) {
+        currentIndex = targetIndex;
         updateCards();
     }
 
     function startAutoRotation() {
         stopAutoRotation();
-        intervalId = setInterval(() => rotateCards('next'), ROTATION_INTERVAL);
+        intervalId = setInterval(() => {
+            rotateCards((currentIndex + 1) % cards.length);
+        }, ROTATION_INTERVAL + TRANSITION_DURATION); // Adiciona a duração da transição ao intervalo de rotação
     }
 
     function stopAutoRotation() {
@@ -356,6 +357,15 @@ function setupCarousel() {
             intervalId = null;
         }
     }
+
+    // Adicionar evento de clique nos cards
+    cards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+            stopAutoRotation();
+            rotateCards(index);
+            startAutoRotation();
+        });
+    });
 
     // Atualizar a criação dos botões de navegação
     const createNavButton = (direction) => {
