@@ -7,6 +7,38 @@
     <link rel="stylesheet" href="css/scrollbar.css">
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/navbar.css" />
+    <style>
+      @media (max-width: 768px) {
+        .intro-cards {
+          display: flex;
+          overflow: hidden;
+          justify-content: center;
+          position: relative;
+        }
+        .intro-card {
+          flex: 0 0 80%;
+          margin: 0 10px;
+          transition: transform 0.3s ease;
+        }
+        .intro-cards::before,
+        .intro-cards::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 10px;
+          background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+          z-index: 1;
+        }
+        .intro-cards::before {
+          left: 0;
+        }
+        .intro-cards::after {
+          right: 0;
+          background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="navbar-container"></div>

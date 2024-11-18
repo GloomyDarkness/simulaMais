@@ -319,6 +319,7 @@ function validarPrazo(event) {
 
 function setupCarousel() {
     const cards = Array.from(document.querySelectorAll('.intro-card'));
+    if (cards.length === 0) return; // Adiciona verificação para garantir que os elementos existam
     let currentIndex = 0;
     let intervalId = null;
     const ROTATION_INTERVAL = 8000; // 8 segundos
@@ -382,6 +383,7 @@ function setupCarousel() {
     };
 
     const cardsContainer = document.querySelector('.intro-cards');
+    if (!cardsContainer) return; // Adiciona verificação para garantir que o elemento exista
     cardsContainer.appendChild(createNavButton('prev'));
     cardsContainer.appendChild(createNavButton('next'));
 
