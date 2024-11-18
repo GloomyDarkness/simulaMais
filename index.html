@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simulador de Fundos Imobiliários</title>
+    <title>Simula Mais</title>
     <link rel="stylesheet" href="css/scrollbar.css">
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/navbar.css" />
@@ -12,7 +12,7 @@
   <body>
     <div id="navbar-container"></div>
     <div class="main-container">
-      <h1>Simulador de Fundos MILIONARIOS </h1>
+      <h1>Simula Mais</h1>
 
       <div class="quick-tips">
         <h3>Como começar?</h3>
@@ -197,15 +197,6 @@
           document.getElementById("navbar-container").innerHTML = data;
         });
     </script>
-    <script>
-      fetch("js/script.js")
-        .then(response => response.text())
-        .then(data => {
-          const script = document.createElement("script");
-          script.type = "text/javascript";
-          script.text = data;
-          document.body.appendChild(script);
-        });
-    </script>
+    <script src="js/script.js"></script>
   </body>
 </html>
