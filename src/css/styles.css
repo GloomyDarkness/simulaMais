@@ -319,7 +319,7 @@ button:hover {
     flex: 1;
     text-align: center;
     padding: 1rem;
-    background-color: var(--card-bg);
+    background-color: var (--card-bg);
     border-radius: 0.5rem;
     box-shadow: var(--shadow);
     margin: 0 0.5rem;
@@ -563,4 +563,71 @@ button:hover {
 .reinvestimento-container label {
     font-weight: 500;
     color: var(--text-secondary);
+}
+
+.year-header {
+    background-color: #f1f5f9;
+    cursor: pointer;
+}
+
+.year-toggle {
+    width: 100%;
+    text-align: left;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    box-shadow: none;
+    max-width: none;
+    margin: 0;
+}
+
+.year-toggle:hover {
+    background-color: #e2e8f0;
+}
+
+.toggle-icon {
+    margin-right: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.months-container {
+    padding: 0 !important;
+}
+
+.months-wrapper {
+    transition: all 0.3s ease;
+}
+
+.month-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.month-row:last-child {
+    border-bottom: none;
+}
+
+.month-row:hover {
+    background-color: #fff8f6;
+}
+
+@media (max-width: 768px) {
+    .month-row {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(120px, 1fr));
+        overflow-x: auto;
+    }
+    
+    .months-wrapper {
+        overflow-x: auto;
+    }
 }

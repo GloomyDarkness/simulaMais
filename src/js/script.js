@@ -90,10 +90,10 @@ function formatarPrazo(prazoMeses) {
         if (anos > 0) {
             resultado += ' e ';
         }
-        resultado += `${meses} mes${meses > 1 ? 'es' : ''}`;
+        resultado += `${meses} mês${meses > 1 ? 'es' : ''}`;
     }
 
-    return resultado;
+    return resultado || `0 meses`; // retorna "0 meses" se não houver prazo
 }
 
 function mostrarErro(mensagem) {
@@ -162,16 +162,81 @@ function calcular() {
     const tbody = document.querySelector('#detalhes-investimento tbody');
     tbody.innerHTML = '';
     
-    resultado.detalhesInvestimento.forEach(detalhe => {
-        const row = tbody.insertRow();
-        row.innerHTML = `
-            <td>${detalhe.mes}º mês</td>
-            <td>${detalhe.cotas}</td>
-            <td>${formatarMoeda(detalhe.valorInvestido)}</td>
-            <td>${formatarMoeda(detalhe.reinvestimento)}</td>
-            <td>${formatarMoeda(detalhe.dividendos)}</td>
+    let currentYear = 1;
+    let currentYearRows = [];
+    
+    resultado.detalhesInvestimento.forEach((detalhe, index) => {
+        if (index > 0 && index % 12 === 0) {
+            // Criar cabeçalho do ano
+            const yearHeader = tbody.insertRow();
+            yearHeader.innerHTML = `
+                <td colspan="5" class="year-header">
+                    <button class="year-toggle" onclick="toggleYear(${currentYear})">
+                        <span class="toggle-icon">▼</span> ${currentYear}º Ano
+                    </button>
+                </td>
+            `;
+            
+            // Criar container para os meses
+            const monthsContainer = tbody.insertRow();
+            monthsContainer.innerHTML = `
+                <td colspan="5" class="months-container">
+                    <div class="months-wrapper" id="year-${currentYear}">
+                        ${currentYearRows.join('')}
+                    </div>
+                </td>
+            `;
+            
+            currentYear++;
+            currentYearRows = [];
+        }
+        
+        const monthRow = `
+            <div class="month-row">
+                <span>${detalhe.mes}º mês</span>
+                <span>${detalhe.cotas}</span>
+                <span>${formatarMoeda(detalhe.valorInvestido)}</span>
+                <span>${formatarMoeda(detalhe.reinvestimento)}</span>
+                <span>${formatarMoeda(detalhe.dividendos)}</span>
+            </div>
         `;
+        currentYearRows.push(monthRow);
+        
+        // Adicionar últimos meses se for o final
+        if (index === resultado.detalhesInvestimento.length - 1 && currentYearRows.length > 0) {
+            const yearHeader = tbody.insertRow();
+            yearHeader.innerHTML = `
+                <td colspan="5" class="year-header">
+                    <button class="year-toggle" onclick="toggleYear(${currentYear})">
+                        <span class="toggle-icon">▼</span> ${currentYear}º Ano
+                    </button>
+                </td>
+            `;
+            
+            const monthsContainer = tbody.insertRow();
+            monthsContainer.innerHTML = `
+                <td colspan="5" class="months-container">
+                    <div class="months-wrapper" id="year-${currentYear}">
+                        ${currentYearRows.join('')}
+                    </div>
+                </td>
+            `;
+        }
     });
+}
+
+function toggleYear(year) {
+    const monthsWrapper = document.getElementById(`year-${year}`);
+    const button = monthsWrapper.parentElement.parentElement.previousElementSibling.querySelector('.year-toggle');
+    const icon = button.querySelector('.toggle-icon');
+    
+    if (monthsWrapper.style.display === 'none') {
+        monthsWrapper.style.display = 'block';
+        icon.textContent = '▼';
+    } else {
+        monthsWrapper.style.display = 'none';
+        icon.textContent = '▶';
+    }
 }
 
 // Adicionar listeners para formatar os inputs
