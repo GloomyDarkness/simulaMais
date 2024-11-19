@@ -1,0 +1,29 @@
+<!-- ...existing code... -->
+<form>
+    <label for="name">Nome:</label>
+    <input type="text" id="name" name="name">
+</form>
+<!-- ...existing code... -->
+<table class="investment-table">
+    <thead>
+        <tr>
+            <th>Mês</th>
+            <th>Cotas</th>
+            <th>Valor Investido</th>
+            <th>Reinvestimento</th>
+            <th>Dividendo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="5" class="year-header">
+                <button class="year-toggle" onclick="toggleYear(1)" aria-expanded="false">
+                    <span class="toggle-icon">▶</span> 1º Ano
+                </button>
+            </td>
+        </tr>
+        <!-- ... mais linhas ... -->
+    </tbody>
+</table>
+<script src="/path/to/toggleYear.js"></script>
+<!-- ...existing code... -->

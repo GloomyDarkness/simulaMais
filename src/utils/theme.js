@@ -1,3 +1,4 @@
+
 function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) {

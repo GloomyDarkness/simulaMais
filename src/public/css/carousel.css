@@ -104,7 +104,7 @@
 
 /* Adicionar estados de transição */
 .carousel-card.left {
-    transform: translateX(-150%) scale(0.8) translateZ(-400px);
+    transform: translateX(-200%) scale(0.8) translateZ(-400px);
     opacity: 0.6;
     z-index: 1;
     transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -118,7 +118,7 @@
 }
 
 .carousel-card.right {
-    transform: translateX(50%) scale(0.8) translateZ(-400px);
+    transform: translateX(100%) scale(0.8) translateZ(-400px);
     opacity: 0.6;
     z-index: 1;
     transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -164,10 +164,10 @@
     }
 
     .carousel-card.left {
-        transform: translateX(-250%) rotateY(-45deg) translateZ(-300px);
+        transform: translateX(-300%) rotateY(-45deg) translateZ(-300px);
     }
 
     .carousel-card.right {
-        transform: translateX(150%) rotateY(45deg) translateZ(-300px);
+        transform: translateX(200%) rotateY(45deg) translateZ(-300px);
     }
 }

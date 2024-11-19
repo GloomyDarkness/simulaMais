@@ -1,0 +1,236 @@
+.navbar {
+    background-color: var(--card-bg);
+    padding: 1rem;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    position: relative;
+}
+
+.navbar-logo {
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-size: 1.75rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.3s;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+}
+
+.navbar-logo .text-simula {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+    font-size: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-logo .plus {
+    color: #ffffff;
+    font-weight: 900;
+    margin-left: 5px;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    transform: rotate(20deg);
+}
+
+.navbar-menu {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    justify-self: center;
+}
+
+.navbar-menu li {
+    display: inline;
+}
+
+.navbar-menu li a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.navbar-menu li a:hover {
+    color: var(--primary-color);
+}
+
+.navbar-right {
+    flex-shrink: 0;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-self: end;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+}
+
+.theme-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--text-primary);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+}
+
+.theme-icon.sun {
+    opacity: 0;
+}
+
+.theme-icon.moon {
+    opacity: 1;
+}
+
+[data-theme="dark"] .theme-icon.sun {
+    opacity: 1;
+}
+
+[data-theme="dark"] .theme-icon.moon {
+    opacity: 0;
+}
+
+@media (max-width: 1024px) {
+    .navbar-container {
+        padding: 0 1rem;
+    }
+
+    .navbar-menu {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 0;
+        background-color: var(--background);
+    }
+
+    .navbar-container {
+        width: 100%;
+        padding: 0 0.75rem;
+        grid-template-columns: 150px 1fr 100px;
+        gap: 0.5rem;
+        padding: 0 1rem;
+    }
+
+    .navbar-menu {
+        gap: 1rem;
+    }
+
+    .navbar-logo {
+        font-size: 1.25rem;
+        min-width: 100px;
+        left: 1rem;
+    }
+
+    .navbar-logo .text-simula {
+        font-size: 1.5rem;
+    }
+
+    .navbar-logo .plus {
+        font-size: 2rem;
+    }
+
+    .navbar-menu li a {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-container {
+        gap: 0.5rem;
+        grid-template-columns: 120px 1fr 80px;
+        padding: 0 0.5rem;
+    }
+
+    .navbar-menu {
+        gap: 0.75rem;
+    }
+
+    .navbar-logo {
+        font-size: 1.1rem;
+        min-width: 90px;
+        left: 0.5rem;
+    }
+
+    .navbar-logo .text-simula {
+        font-size: 1.25rem;
+    }
+
+    .navbar-logo .plus {
+        font-size: 1.75rem;
+    }
+
+    .navbar-menu li a {
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .navbar-container {
+        padding: 0 0.25rem;
+    }
+
+    .navbar-menu {
+        gap: 0.5rem;
+    }
+
+    .navbar-menu li a {
+        font-size: 0.75rem;
+    }
+}

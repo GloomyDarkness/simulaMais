@@ -1,32 +1,4 @@
 /*====================
-    VARIÁVEIS DE TEMA
-====================*/
-
-:root {
-    /* Tema Claro (Padrão) */
-    --primary-color: #ea580c;
-    --primary-hover: #c2410c;
-    --background: #f8fafc;
-    --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-}
-
-[data-theme="dark"] {
-    /* Tema Escuro */
-    --primary-color: #fb923c;
-    --primary-hover: #ea580c;
-    --background: #1e1e1e;
-    --card-bg: #2d2d2d;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --border-color: #404040;
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
-}
-
-/*====================
     CONFIGURAÇÕES GERAIS
 ====================*/
 
@@ -34,16 +6,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: var(--background);
-    color: var(--text-primary);
-    line-height: 1.5;
-    margin-top: 70px;
-    padding: 1rem;
-    transition: background-color 0.3s, color 0.3s;
 }
 
 /*====================
@@ -55,6 +17,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
+    background-color: var(--background);
 }
 
 .form-container {
@@ -196,36 +159,13 @@ button:hover {
     cursor: pointer;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: var(--background);
-    color: var(--text-primary);
-    line-height: 1.5;
-    padding: 2rem;
-    margin-top: 70px; /* Espaço para a navbar fixa */
-    padding: 1rem;
-    overflow-x: hidden;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
 .main-container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
     box-sizing: border-box;
+    background-color: var(--background);
 }
 
 h1 {
@@ -473,7 +413,7 @@ button:hover {
     margin-bottom: 1.5rem;
 }
 
-.results-row:last-child {
+results-row:last-child {
     margin-bottom: 0;
 }
 
